@@ -26,7 +26,7 @@ func main() {
 		if isBuiltIn(command) {
 			performBuiltin(command, args)
 		} else {
-			fmt.Println(command, ": unknown command")
+			fmt.Printf("%s: command not found\n", command)
 		}
 	}
 }
