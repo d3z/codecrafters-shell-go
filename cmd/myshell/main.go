@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var builtins = []string{"exit", "echo"}
+
 func main() {
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
@@ -20,27 +22,44 @@ func main() {
 		input = input[:len(input)-1] // Remove trailing newline
 
 		command, args := parseInput(input)
-		
-		if command == "exit" {
-			if len(args) != 1 {
-				fmt.Fprintln(os.Stderr, "usage: exit <exit code>")
-				continue
-			} else {
-				exitCode, err := strconv.Atoi(args[0])
-				if err != nil {
-					fmt.Fprintln(os.Stderr, "Invalid exit code:", args[0])
-					os.Exit(1)
-				}
 
-				os.Exit(exitCode)
-			}
+		if isBuiltIn(command) {
+			performBuiltin(command, args)
+		} else {
+			fmt.Println(command, ": unknown command")
 		}
-
-		fmt.Printf("%s: command not found\n", input)
 	}
 }
 
 func parseInput(input string) (command string, args []string) {
 	parsed := strings.Split(input, " ")
 	return parsed[0], parsed[1:]
+}
+
+func isBuiltIn(command string) bool {
+	for _, builtin := range builtins {
+		if command == builtin {
+			return true
+		}
+	}
+	return false
+}
+
+func performBuiltin(command string, args []string) {
+	switch command {
+	case "exit":
+		if len(args) != 1 {
+			fmt.Fprintln(os.Stderr, "usage: exit <exit code>")
+			return
+		} else {
+			exitCode, err := strconv.Atoi(args[0])
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Invalid exit code:", args[0])
+				os.Exit(1)
+			}
+			os.Exit(exitCode)
+		}
+	case "echo":
+		fmt.Println(strings.Join(args, " "))
+	}
 }
