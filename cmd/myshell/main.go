@@ -67,9 +67,9 @@ func performBuiltin(command string, args []string) {
 			return
 		}
 		if isBuiltIn(command) {
-			fmt.Printf("%s is a shell builtin", command)
+			fmt.Printf("%s is a shell builtin\n", command)
 		} else {
-			fmt.Printf("%s not found", command)
+			fmt.Printf("%s not found\n", command)
 		}
 	}
 }
