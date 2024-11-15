@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -26,6 +27,14 @@ func main() {
 
 		if isBuiltIn(command) {
 			performBuiltin(command, args)
+		} else if path := knownPath(command); path != "" {
+			cmd := exec.Command(path, args...)
+			cmd.Stdin = os.Stdin
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			}
 		} else {
 			fmt.Printf("%s: command not found\n", command)
 		}
