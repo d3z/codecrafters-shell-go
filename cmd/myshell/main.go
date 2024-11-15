@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -69,8 +70,21 @@ func performBuiltin(command string, args []string) {
 		commandToCheck := args[0]
 		if isBuiltIn(commandToCheck) {
 			fmt.Printf("%s is a shell builtin\n", commandToCheck)
+		} else if path := knownPath(commandToCheck); path != "" {
+			fmt.Printf("%s is %s\n", commandToCheck, path)
 		} else {
 			fmt.Printf("%s not found\n", commandToCheck)
 		}
 	}
+}
+
+func knownPath(command string) string {
+	pathList := strings.Split(os.Getenv("PATH"), ":")
+	for _, dir := range pathList {
+		path := filepath.Join(dir, command)
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
+	}
+	return ""
 }
