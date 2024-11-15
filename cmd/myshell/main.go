@@ -73,7 +73,7 @@ func performBuiltin(command string, args []string) {
 		} else if path := knownPath(commandToCheck); path != "" {
 			fmt.Printf("%s is %s\n", commandToCheck, path)
 		} else {
-			fmt.Printf("%s not found\n", commandToCheck)
+			fmt.Printf("%s: not found\n", commandToCheck)
 		}
 	}
 }
