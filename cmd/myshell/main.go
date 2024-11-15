@@ -66,10 +66,11 @@ func performBuiltin(command string, args []string) {
 			fmt.Fprintln(os.Stderr, "usage: type <command>")
 			return
 		}
-		if isBuiltIn(command) {
-			fmt.Printf("%s is a shell builtin\n", command)
+		commandToCheck := args[0]
+		if isBuiltIn(commandToCheck) {
+			fmt.Printf("%s is a shell builtin\n", commandToCheck)
 		} else {
-			fmt.Printf("%s not found\n", command)
+			fmt.Printf("%s not found\n", commandToCheck)
 		}
 	}
 }
