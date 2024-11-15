@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var builtins = []string{"exit", "echo"}
+var builtins = []string{"exit", "echo", "type"}
 
 func main() {
 	for {
@@ -61,5 +61,15 @@ func performBuiltin(command string, args []string) {
 		}
 	case "echo":
 		fmt.Println(strings.Join(args, " "))
+	case "type":
+		if len(args) != 1 {
+			fmt.Fprintln(os.Stderr, "usage: type <command>")
+			return
+		}
+		if isBuiltIn(command) {
+			fmt.Printf("%s is a shell builtin", command)
+		} else {
+			fmt.Printf("%s not found", command)
+		}
 	}
 }
