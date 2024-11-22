@@ -91,9 +91,13 @@ func performBuiltin(command string, args []string) {
 		}
 		fmt.Println(pwd)
 	case "cd":
-		path := "/"
+		path := "~"
 		if len(args) == 1 {
 			path = args[0]
+			userHome, err := os.UserHomeDir()
+			if err == nil {
+				path = strings.ReplaceAll(path, "~", userHome)
+			}
 		}
 		err := os.Chdir(path)
 		if err != nil {
