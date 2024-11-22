@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var builtins = []string{"exit", "echo", "type", "pwd"}
+var builtins = []string{"exit", "echo", "type", "pwd", "cd"}
 
 func main() {
 	for {
@@ -90,6 +90,15 @@ func performBuiltin(command string, args []string) {
 			fmt.Fprintln(os.Stderr, "error while getting current working directory")
 		}
 		fmt.Println(pwd)
+	case "cd":
+		path := "/"
+		if len(args) == 1 {
+			path = args[0]
+		}
+		err := os.Chdir(path)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "cd: %s: No such file or directory\n", path)
+		}
 	}	
 }
 
