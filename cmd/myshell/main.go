@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var builtins = []string{"exit", "echo", "type"}
+var builtins = []string{"exit", "echo", "type", "pwd"}
 
 func main() {
 	for {
@@ -84,7 +84,13 @@ func performBuiltin(command string, args []string) {
 		} else {
 			fmt.Printf("%s: not found\n", commandToCheck)
 		}
-	}
+	case "pwd":
+		pwd, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "error while getting current working directory")
+		}
+		fmt.Println(pwd)
+	}	
 }
 
 func knownPath(command string) string {
